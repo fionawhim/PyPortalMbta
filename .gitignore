@@ -1,0 +1,8 @@
+boot_out.txt
+lib
+.metadata_never_index
+.Trashes
+.vscode
+.fseventsd
+
+secrets.py
