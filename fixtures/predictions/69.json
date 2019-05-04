@@ -1,0 +1,43 @@
+{
+  "data": [
+    {
+      "attributes": {
+        "arrival_time": "2019-05-03T19:42:38-04:00",
+        "departure_time": "2019-05-03T19:42:38-04:00",
+        "direction_id": 0,
+        "schedule_relationship": null,
+        "status": null,
+        "stop_sequence": 5
+      },
+      "id": "prediction-40164903-1419-5",
+      "relationships": {
+        "route": { "data": { "id": "69", "type": "route" } },
+        "stop": { "data": { "id": "1419", "type": "stop" } },
+        "trip": { "data": { "id": "40164903", "type": "trip" } }
+      },
+      "type": "prediction"
+    },
+    {
+      "attributes": {
+        "arrival_time": "2019-05-03T20:22:46-04:00",
+        "departure_time": "2019-05-03T20:22:46-04:00",
+        "direction_id": 0,
+        "schedule_relationship": null,
+        "status": null,
+        "stop_sequence": 5
+      },
+      "id": "prediction-40164904-1419-5",
+      "relationships": {
+        "route": { "data": { "id": "69", "type": "route" } },
+        "stop": { "data": { "id": "1419", "type": "stop" } },
+        "trip": { "data": { "id": "40164904", "type": "trip" } }
+      },
+      "type": "prediction"
+    }
+  ],
+  "jsonapi": { "version": "1.0" },
+  "links": {
+    "first": "https://api-v3.mbta.com/predictions?filter[route]=69&filter[stop]=1419&page[limit]=3&page[offset]=0&sort=arrival_time",
+    "last": "https://api-v3.mbta.com/predictions?filter[route]=69&filter[stop]=1419&page[limit]=3&page[offset]=0&sort=arrival_time"
+  }
+}

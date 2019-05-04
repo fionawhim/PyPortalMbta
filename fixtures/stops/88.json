@@ -1,0 +1,59 @@
+{
+  "data": [
+    {
+      "attributes": {
+        "address": null,
+        "description": null,
+        "latitude": 42.374126,
+        "location_type": 0,
+        "longitude": -71.082561,
+        "name": "McGrath Hwy opp Twin City Plaza",
+        "platform_code": null,
+        "platform_name": null,
+        "wheelchair_boarding": 1
+      },
+      "id": "2605",
+      "links": { "self": "/stops/2605" },
+      "relationships": {
+        "child_stops": {},
+        "facilities": {
+          "links": { "related": "/facilities/?filter[stop]=2605" }
+        },
+        "parent_station": { "data": null },
+        "recommended_transfers": {},
+        "route": { "data": { "id": "88", "type": "route" } },
+        "zone": { "data": null }
+      },
+      "type": "stop"
+    }
+  ],
+  "included": [
+    {
+      "attributes": {
+        "color": "FFC72C",
+        "description": "Local Bus",
+        "direction_destinations": ["Clarendon Hill", "Lechmere"],
+        "direction_names": ["Outbound", "Inbound"],
+        "fare_class": "Local Bus",
+        "long_name": "Clarendon Hill - Lechmere via Highland Avenue",
+        "short_name": "88",
+        "sort_order": 50880,
+        "text_color": "000000",
+        "type": 3
+      },
+      "id": "88",
+      "links": { "self": "/routes/88" },
+      "relationships": {
+        "line": { "data": { "id": "line-88", "type": "line" } },
+        "route_patterns": {}
+      },
+      "type": "route"
+    }
+  ],
+  "jsonapi": { "version": "1.0" },
+  "links": {
+    "first": "https://api-v3.mbta.com/stops?filter[direction_id]=0&filter[latitude]=42.37&filter[longitude]=-71.0844&filter[route]=88&include=route&page[limit]=1&page[offset]=0&sort=distance",
+    "last": "https://api-v3.mbta.com/stops?filter[direction_id]=0&filter[latitude]=42.37&filter[longitude]=-71.0844&filter[route]=88&include=route&page[limit]=1&page[offset]=3&sort=distance",
+    "next": "https://api-v3.mbta.com/stops?filter[direction_id]=0&filter[latitude]=42.37&filter[longitude]=-71.0844&filter[route]=88&include=route&page[limit]=1&page[offset]=1&sort=distance"
+  }
+}

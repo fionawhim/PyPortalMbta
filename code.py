@@ -1,14 +1,15 @@
 import time
 import board
 import busio
-import re
 from digitalio import DigitalInOut
 import neopixel
+import displayio
 from adafruit_esp32spi import adafruit_esp32spi
 from adafruit_esp32spi import adafruit_esp32spi_wifimanager
 
-from url_helpers import make_q, URL_BASE
-from stop import Stop
+from MbtaApi import MbtaApi, MbtaApiFake
+from Stop import Stop
+from RouteDisplay import RouteDisplay
 
 # Get wifi details and more from a secrets.py file
 try:
@@ -24,62 +25,44 @@ esp32_reset = DigitalInOut(board.ESP_RESET)
 
 spi = busio.SPI(board.SCK, board.MOSI, board.MISO)
 esp = adafruit_esp32spi.ESP_SPIcontrol(spi, esp32_cs, esp32_ready, esp32_reset)
-status_light = neopixel.NeoPixel(
-    board.NEOPIXEL, 1, brightness=0.2
-) 
+status_light = neopixel.NeoPixel(board.NEOPIXEL, 1, brightness=0.2)
 wifi = adafruit_esp32spi_wifimanager.ESPSPI_WiFiManager(esp, secrets, status_light)
 
 LAT = 42.37
 LNG = -71.0844
 
+# mbta_api = MbtaApi(wifi, lat=LAT, lng=LNG)
+mbta_api = MbtaApiFake()
 
-ROUTES = [("69", 0), ("87", 0)]  # , ("88", 0)]
-
-
-def get_nearest_stop(wifi, route, direction_id):
-    stops_url = (
-        URL_BASE
-        + "stops?"
-        + make_q(
-            {
-                "page[limit]": 1,
-                "sort": "distance",
-                "include": "route",
-                "filter[route]": route,
-                "filter[direction_id]": direction_id,
-                "filter[latitude]": LAT,
-                "filter[longitude]": LNG,
-            }
-        )
-    )
-
-    response = wifi.get(stops_url)
-    response_json = response.json()
-
-    stop = response_json["data"][0]
-    route = response_json["included"][0]
-
-    response.close()
-
-    return (stop, route)
-
-
+ROUTES = [("69", 0), ("87", 0), ("88", 0)]
 
 STOPS = []
+DISPLAYS = []
+
+TEST_TIME = "2019-05-03T23:24:00+0000"
+TEST_TIME_EPOCH = 1556925840
+
+group = displayio.Group(max_size=15)
+board.DISPLAY.show(group)
+
 
 def startup():
-    for (r, direction) in ROUTES:
-        stop, route = get_nearest_stop(wifi, r, direction)
-        STOPS.append(
-            Stop(
-                route_id=route["id"],
-                stop_id=stop["id"],
-                stop_name=stop["attributes"]["name"],
-            )
+    for i, (r, direction) in enumerate(ROUTES):
+        stop, route = mbta_api.get_nearest_stop(r, direction)
+
+        s = Stop(
+            mbta_api=mbta_api,
+            route_id=route["id"],
+            direction_name=route["attributes"]["direction_destinations"][direction],
+            stop_id=stop["id"],
+            stop_name=stop["attributes"]["name"],
         )
 
+        STOPS.append(s)
+        DISPLAYS.append(RouteDisplay(group=group, stop=s, i=i))
+
     for s in STOPS:
-        s.load_predictions(wifi)
+        s.load_predictions()
 
     for s in STOPS:
         print(s.route_id, s.stop_name)
@@ -89,7 +72,16 @@ def startup():
 
         print()
 
+
 startup()
+
+while True:
+    for d in DISPLAYS:
+        d.render()
+
+    board.DISPLAY.refresh_soon()
+    board.DISPLAY.wait_for_frame()
+    time.sleep(10)
 
 
 # while True:
